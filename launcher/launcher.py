@@ -166,6 +166,10 @@ class DeckFlowLauncher:
         try:
             self.status["error"] = None
             
+            # Refresh IP and Controller URL in case network changed
+            self.local_ip = self.get_local_ip()
+            self.controller_url = f"http://{self.local_ip}:{8000 if self.is_production else 5173}/controller"
+            
             # 1. Backend
             self.status["backend"] = "Checking..."
             health = self.check_backend_health()
