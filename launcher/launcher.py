@@ -36,7 +36,7 @@ class DeckFlowLauncher:
         self.local_ip = self.get_local_ip()
         
         self.backend_url = "http://127.0.0.1:8000"
-        self.frontend_url = self.backend_url if self.is_production else "http://127.0.0.1:5173"
+        self.frontend_url = self.backend_url if self.is_production else "http://localhost:5173"
         self.controller_url = f"http://{self.local_ip}:{8000 if self.is_production else 5173}/controller"
         
         self.status = {
