@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { Settings, MousePointerClick, Image as ImageIcon, ShieldAlert } from 'lucide-react';
-import { api } from '../../services/api';
 import ActionList from '../actions/ActionList';
 import ActionLibraryModal from '../actions/ActionLibraryModal';
 import { ACTION_REGISTRY } from '../actions/ActionRegistry';
