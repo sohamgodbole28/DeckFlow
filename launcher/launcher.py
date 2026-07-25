@@ -178,9 +178,10 @@ class DeckFlowLauncher:
             else:
                 self.status["backend"] = "Starting..."
                 if os.name == 'nt':
-                    self.backend_process = subprocess.Popen(["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"], cwd=BACKEND_DIR, shell=True)
+                    python_exe = sys.executable.replace("pythonw.exe", "python.exe")
+                    self.backend_process = subprocess.Popen([python_exe, "-m", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"], cwd=BACKEND_DIR)
                 else:
-                    self.backend_process = subprocess.Popen(["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"], cwd=BACKEND_DIR)
+                    self.backend_process = subprocess.Popen([sys.executable, "-m", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"], cwd=BACKEND_DIR)
                 
                 # Wait for healthy
                 for _ in range(30):
@@ -200,7 +201,8 @@ class DeckFlowLauncher:
             else:
                 self.status["agent"] = "Starting..."
                 if os.name == 'nt':
-                    self.agent_process = subprocess.Popen([sys.executable, "agent.py"], cwd=AGENT_DIR, shell=True)
+                    python_exe = sys.executable.replace("pythonw.exe", "python.exe")
+                    self.agent_process = subprocess.Popen([python_exe, "agent.py"], cwd=AGENT_DIR)
                 else:
                     self.agent_process = subprocess.Popen([sys.executable, "agent.py"], cwd=AGENT_DIR)
                 

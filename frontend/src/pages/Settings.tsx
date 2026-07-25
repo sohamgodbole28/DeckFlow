@@ -34,6 +34,14 @@ export default function Settings() {
     }
   };
 
+  const handleDeleteDevice = async (id: number) => {
+    if (id) {
+      await api.deleteDevice(id);
+      const devs = await api.getDevices();
+      setDevices(devs);
+    }
+  };
+
   return (
     <div className="flex h-full w-full bg-background">
       <div className="flex-1 p-8 overflow-y-auto max-w-4xl mx-auto w-full">
@@ -81,6 +89,11 @@ export default function Settings() {
                   {!d.approved && (
                     <button onClick={() => handleApproveDevice(d.uuid)} className="px-3 py-1 bg-primary text-white text-xs rounded hover:bg-primaryHover">
                       Approve
+                    </button>
+                  )}
+                  {d.approved && (
+                    <button onClick={() => handleDeleteDevice(d.id)} className="px-3 py-1 bg-red-500/20 text-red-500 text-xs rounded hover:bg-red-500 hover:text-white transition-colors">
+                      Delete
                     </button>
                   )}
                 </div>

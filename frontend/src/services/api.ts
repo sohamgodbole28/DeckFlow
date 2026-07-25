@@ -108,6 +108,12 @@ export const api = {
     });
     return res.json();
   },
+  deleteDevice: async (deviceId: number) => {
+    const res = await fetch(`${API_URL}/devices/${deviceId}`, {
+      method: 'DELETE'
+    });
+    return res.json();
+  },
 
   // System
   getSystemApps: async () => {

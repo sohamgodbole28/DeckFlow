@@ -311,9 +311,19 @@ export default function Editor() {
 
         <div className="flex justify-between items-center mb-4">
           <h2 className="font-bold text-lg flex items-center gap-2"><Layers size={20} className="text-primary"/> Pages</h2>
-          <button onClick={handleCreatePage} className="p-1 rounded bg-primary/20 text-primary hover:bg-primary/30 transition-colors">
-            <Plus size={16} />
-          </button>
+          <div className="flex gap-1">
+            <button onClick={handleCreatePage} className="p-1 rounded bg-primary/20 text-primary hover:bg-primary/30 transition-colors" title="Create new page">
+              <Plus size={16} />
+            </button>
+            <button 
+              onClick={(e) => currentPageId && handleDeletePage(currentPageId, e)} 
+              className="p-1 rounded bg-red-500/20 text-red-500 hover:bg-red-500/30 transition-colors disabled:opacity-50 disabled:cursor-not-allowed" 
+              title="Delete current page"
+              disabled={!currentPageId || pages.length === 0}
+            >
+              <Trash2 size={16} />
+            </button>
+          </div>
         </div>
 
         <div className="flex flex-col gap-2">
@@ -323,12 +333,13 @@ export default function Editor() {
               onClick={() => setCurrentPageId(p.id)}
               className={`flex justify-between items-center px-3 py-2 rounded-lg transition-colors border cursor-pointer ${currentPageId === p.id ? 'bg-primary/10 border-primary text-primary' : 'border-transparent hover:bg-border/50 text-text'}`}
             >
-              <span>{p.name}</span>
+              <span className="truncate pr-2">{p.name}</span>
               <button 
                 onClick={(e) => handleDeletePage(p.id, e)} 
-                className="text-textMuted hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity p-1 rounded hover:bg-red-500/20"
+                className="text-red-500/70 hover:text-red-500 hover:bg-red-500/20 transition-all p-1.5 rounded-md"
+                title="Delete page"
               >
-                <Trash2 size={14} />
+                <Trash2 size={16} />
               </button>
             </div>
           ))}
