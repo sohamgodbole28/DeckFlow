@@ -13,6 +13,8 @@ import qrcode
 import pystray
 from pystray import MenuItem as item
 
+CREATE_NO_WINDOW = getattr(subprocess, 'CREATE_NO_WINDOW', 0x08000000) if os.name == 'nt' else 0
+
 # Paths
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 BACKEND_DIR = os.path.join(ROOT_DIR, "backend")
@@ -179,7 +181,7 @@ class DeckFlowLauncher:
                 self.status["backend"] = "Starting..."
                 if os.name == 'nt':
                     python_exe = sys.executable.replace("pythonw.exe", "python.exe")
-                    self.backend_process = subprocess.Popen([python_exe, "-m", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"], cwd=BACKEND_DIR)
+                    self.backend_process = subprocess.Popen([python_exe, "-m", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"], cwd=BACKEND_DIR, creationflags=CREATE_NO_WINDOW)
                 else:
                     self.backend_process = subprocess.Popen([sys.executable, "-m", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"], cwd=BACKEND_DIR)
                 
@@ -202,7 +204,7 @@ class DeckFlowLauncher:
                 self.status["agent"] = "Starting..."
                 if os.name == 'nt':
                     python_exe = sys.executable.replace("pythonw.exe", "python.exe")
-                    self.agent_process = subprocess.Popen([python_exe, "agent.py"], cwd=AGENT_DIR)
+                    self.agent_process = subprocess.Popen([python_exe, "agent.py"], cwd=AGENT_DIR, creationflags=CREATE_NO_WINDOW)
                 else:
                     self.agent_process = subprocess.Popen([sys.executable, "agent.py"], cwd=AGENT_DIR)
                 
@@ -233,7 +235,7 @@ class DeckFlowLauncher:
                 else:
                     self.status["frontend"] = "Starting..."
                     if os.name == 'nt':
-                        self.frontend_process = subprocess.Popen(["npm", "run", "dev"], cwd=FRONTEND_DIR, shell=True)
+                        self.frontend_process = subprocess.Popen(["npm", "run", "dev"], cwd=FRONTEND_DIR, shell=True, creationflags=CREATE_NO_WINDOW)
                     else:
                         self.frontend_process = subprocess.Popen(["npm", "run", "dev"], cwd=FRONTEND_DIR)
                     
@@ -296,7 +298,7 @@ class DeckFlowLauncher:
                     # In windows shell=True uses cmd, so p.terminate kills cmd, not the child.
                     # We will use taskkill for robust cleanup on windows if needed, but p.terminate() is standard
                     if os.name == 'nt':
-                        subprocess.run(['taskkill', '/F', '/T', '/PID', str(p.pid)], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                        subprocess.run(['taskkill', '/F', '/T', '/PID', str(p.pid)], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, creationflags=CREATE_NO_WINDOW)
                     else:
                         p.terminate()
                 except:
